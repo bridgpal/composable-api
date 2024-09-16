@@ -4,16 +4,12 @@ import ProductCard from '@/components/ProductCard';
 
 async function getProducts() {
   const baseUrl = process.env.URL || 'http://localhost:8888';
-  console.log('Base URL:', baseUrl); // Log the base URL
-  const response = await fetch(`${baseUrl}/.netlify/functions/contentstack`, { 
+  console.log(baseUrl);
+  const response = await fetch(`${baseUrl}/api/orders`, { 
     cache: 'no-store',
   });
   
-  console.log('Response status:', response.status); // Log the response status
-
   if (!response.ok) {
-    const errorText = await response.text(); // Get error text for more details
-    console.error('Fetch error:', errorText); // Log the error text
     throw new Error('Failed to fetch products');
   }
   
