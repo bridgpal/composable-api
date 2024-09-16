@@ -23,9 +23,14 @@ export default async function orders() {
 
   // Evaluate the feature flag
   const orderSource = await ldClient.variation('order-source', user, 'default-source');
-console.log("LAUNCHDARKLY orderSource", orderSource);
+  console.log("LAUNCHDARKLY orderSource", orderSource);
   if (!orderSource) {
-    return new Response("Missing shopping source", { status: 400 });
+    return new Response("Missing shopping source", { 
+      status: 400,
+      headers: {
+        'Cache-Control': 'no-store, max-age=0'
+      }
+    });
   }
 
   endpoint = `/.netlify/functions/${orderSource}`;
@@ -38,15 +43,30 @@ console.log("LAUNCHDARKLY orderSource", orderSource);
     const response = await fetch(fullUrl, { headers });
     if (!response.ok) {
       console.error(`HTTP error! status: ${response.status}`);
-      return new Response("Error fetching data", { status: response.status });
+      return new Response("Error fetching data", { 
+        status: response.status,
+        headers: {
+          'Cache-Control': 'no-store, max-age=0'
+        }
+      });
     }
     const json = await response.json();
     console.log(json);
 
-    return Response.json(json);
+    return new Response(JSON.stringify(json), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, max-age=0'
+      }
+    });
   } catch (error) {
     console.error(`Failed to fetch data from ${orderSource}:`, error);
-    return new Response("Internal server error", { status: 500 });
+    return new Response("Internal server error", { 
+      status: 500,
+      headers: {
+        'Cache-Control': 'no-store, max-age=0'
+      }
+    });
   } finally {
     // Close the LaunchDarkly client
     await ldClient.close();
