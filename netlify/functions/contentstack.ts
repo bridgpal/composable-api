@@ -39,7 +39,14 @@ async function getProducts() {
   const result = await res.json();
   const nodes = result?.data?.allContentstackProduct?.nodes || [];
 
-  return nodes.map(node => ({
+  return nodes.map((node: {
+    id: string;
+    title: string;
+    description: string;
+    price: number;
+    rating: number;
+    image?: { url: string };
+  }) => ({
     id: node.id,
     title: node.title,
     description: node.description,
