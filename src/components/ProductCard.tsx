@@ -13,7 +13,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => (
     />
     <div className="p-4">
       <span className="text-xs text-indigo-600 font-semibold">
-        {product.rating.toFixed(1)} ★
+        {product.rating && `${product.rating.toFixed(1)} ★`}
       </span>
       <h2 className="text-lg font-bold mt-1 mb-2">{product.title}</h2>
       <div className="flex justify-between items-center">

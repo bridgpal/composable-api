@@ -1,17 +1,10 @@
-import { use } from 'react';
 import Image from "next/image";
-
-import { Suspense } from 'react';
-
 import Navigation from '@/components/Navigation';
 import ProductCard from '@/components/ProductCard';
 
-
-
-
 async function getProducts(): Promise<Product[]> {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888';
-  const response = await fetch(`${baseUrl}/.netlify/functions/contentstack`, { 
+  const response = await fetch(`${baseUrl}/api/orders`, { 
     cache: 'no-store',
   });
   
@@ -22,8 +15,8 @@ async function getProducts(): Promise<Product[]> {
   return response.json();
 }
 
-function ProductList() {
-  const products = use(getProducts());
+async function ProductList() {
+  const products = await getProducts();
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -34,7 +27,7 @@ function ProductList() {
   );
 }
 
-const HipEcommercePage = () => {
+export default async function HipEcommercePage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navigation />
@@ -45,12 +38,8 @@ const HipEcommercePage = () => {
         <p className="text-gray-600 mb-8">
           Discover our curated collection of sustainable fashion
         </p>
-        <Suspense fallback={<div>Loading products...</div>}>
-          <ProductList />
-        </Suspense>
+        <ProductList />
       </div>
     </div>
   );
-};
-
-export default HipEcommercePage;
+}
