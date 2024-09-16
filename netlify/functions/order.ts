@@ -1,5 +1,5 @@
 import type { Config } from "@netlify/functions";
-const source = Netlify.env.get("SHOPPING_SOURCE");
+const source = process.env.SHOPPING_SOURCE;
 
 
 const baseUrl = process.env.URL; // Use environment variable for production, fallback for local development

@@ -24,7 +24,10 @@ query products {
 `;
 
 async function getProducts() {
-  const res = await fetch(process.env.NETLIFY_CONNECT_API_URL, {
+  const apiUrl = process.env.NETLIFY_CONNECT_API_URL;
+  if (!apiUrl) throw new Error('NETLIFY_CONNECT_API_URL is not defined');
+
+  const res = await fetch(apiUrl, {
     method: `POST`,
     headers: {
       "Content-Type": "application/json",

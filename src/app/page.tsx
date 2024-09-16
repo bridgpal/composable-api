@@ -3,8 +3,9 @@ import Navigation from '@/components/Navigation';
 import ProductCard from '@/components/ProductCard';
 
 async function getProducts(): Promise<Product[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8888';
-  const response = await fetch(`${baseUrl}/api/orders`, { 
+  const baseUrl = process.env.URL || 'http://localhost:8888';
+  console.log(baseUrl);
+  const response = await fetch(`${baseUrl}/.netlify/functions/shopify`, { 
     cache: 'no-store',
   });
   
@@ -16,7 +17,7 @@ async function getProducts(): Promise<Product[]> {
 }
 
 async function ProductList() {
-  const products = await getProducts();
+  const products = await getProducts()
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
