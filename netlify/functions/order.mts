@@ -3,8 +3,8 @@ import * as LaunchDarkly from 'launchdarkly-node-server-sdk';
 
 const baseUrl = process.env.URL; // Use environment variable for production, fallback for local development
 
-// Initialize the LaunchDarkly client
-const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY);
+// Initialize the LaunchDarkly client outside the handler function
+let ldClient: LaunchDarkly.LDClient | null = null;
 
 export default async function orders() {
   let endpoint: string;
@@ -12,8 +12,11 @@ export default async function orders() {
     Accept: "application/json",
   };
 
-  // Wait for the LaunchDarkly client to be ready
-  await ldClient.waitForInitialization();
+  // Initialize the LaunchDarkly client if it hasn't been initialized
+  if (!ldClient) {
+    ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY);
+    await ldClient.waitForInitialization();
+  }
 
   // Create a user object (you may want to customize this based on your needs)
   const user = {
@@ -24,7 +27,6 @@ export default async function orders() {
   // Evaluate the feature flag
   const orderSource = await ldClient.variation('order-source', user, 'default-source');
   console.log("LAUNCHDARKLY orderSource", orderSource);
-  console.log("Time", new Date().toISOString());
   if (!orderSource) {
     return new Response("Missing shopping source", { 
       status: 400,
@@ -52,6 +54,7 @@ export default async function orders() {
       });
     }
     const json = await response.json();
+    console.log(json);
 
     return new Response(JSON.stringify(json), {
       headers: {
@@ -67,9 +70,6 @@ export default async function orders() {
         'Cache-Control': 'no-store, max-age=0'
       }
     });
-  } finally {
-    // Close the LaunchDarkly client
-    await ldClient.close();
   }
 }
 
