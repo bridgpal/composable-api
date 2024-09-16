@@ -5,7 +5,7 @@ import ProductCard from '@/components/ProductCard';
 async function getProducts() {
   const baseUrl = process.env.URL || 'http://localhost:8888';
   console.log(baseUrl);
-  const response = await fetch(`${baseUrl}/.netlify/functions/shopify`, { 
+  const response = await fetch(`${baseUrl}/.netlify/functions/contentstack`, { 
     cache: 'no-store',
   });
   
@@ -21,7 +21,7 @@ async function ProductList() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      {products.map((product) => (
+      {products.map((product: any) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </div>

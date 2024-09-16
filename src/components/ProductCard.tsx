@@ -1,4 +1,10 @@
-import { Product } from '@/types/Product';
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  rating?: number;
+}
 
 interface ProductCardProps {
   product: Product;
