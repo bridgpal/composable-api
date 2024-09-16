@@ -1,10 +1,10 @@
 import type { Config } from "@netlify/functions";
-const source = process.env.SHOPPING_SOURCE;
-
+import * as LaunchDarkly from 'launchdarkly-node-server-sdk';
 
 const baseUrl = process.env.URL; // Use environment variable for production, fallback for local development
 
-
+// Initialize the LaunchDarkly client
+const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY);
 
 export default async function orders() {
   let endpoint: string;
@@ -12,11 +12,23 @@ export default async function orders() {
     Accept: "application/json",
   };
 
-  if (!source) {
+  // Wait for the LaunchDarkly client to be ready
+  await ldClient.waitForInitialization();
+
+  // Create a user object (you may want to customize this based on your needs)
+  const user = {
+    key: 'user-key-123',
+    // Add other user properties if needed
+  };
+
+  // Evaluate the feature flag
+  const orderSource = await ldClient.variation('order-source', user, 'default-source');
+console.log("LAUNCHDARKLY orderSource", orderSource);
+  if (!orderSource) {
     return new Response("Missing shopping source", { status: 400 });
   }
 
-  endpoint = `/.netlify/functions/${source}`;
+  endpoint = `/.netlify/functions/${orderSource}`;
 
   // Validate if the endpoint exists
   let fullUrl = new URL(endpoint, baseUrl).toString();
@@ -33,8 +45,11 @@ export default async function orders() {
 
     return Response.json(json);
   } catch (error) {
-    console.error(`Failed to fetch data from ${source}:`, error);
+    console.error(`Failed to fetch data from ${orderSource}:`, error);
     return new Response("Internal server error", { status: 500 });
+  } finally {
+    // Close the LaunchDarkly client
+    await ldClient.close();
   }
 }
 
