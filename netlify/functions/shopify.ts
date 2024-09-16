@@ -39,7 +39,7 @@ async function getProducts() {
   const result = await res.json();
   const nodes = result?.data?.allShopifyProduct?.nodes || [];
 
-  return nodes.map(node => ({
+  return nodes.map((node: any) => ({
     id: node.id,
     title: node.title,
     shopifyId: node.shopifyId,

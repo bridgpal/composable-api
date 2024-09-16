@@ -2,7 +2,7 @@ import Image from "next/image";
 import Navigation from '@/components/Navigation';
 import ProductCard from '@/components/ProductCard';
 
-async function getProducts(): Promise<Product[]> {
+async function getProducts() {
   const baseUrl = process.env.URL || 'http://localhost:8888';
   console.log(baseUrl);
   const response = await fetch(`${baseUrl}/.netlify/functions/shopify`, { 

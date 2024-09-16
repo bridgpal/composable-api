@@ -30,7 +30,7 @@ export default async function orders() {
     }
     const json = await response.json();
     console.log(json);
-    // @ts-expect-error this syntax is allowed
+
     return Response.json(json);
   } catch (error) {
     console.error(`Failed to fetch data from ${source}:`, error);
