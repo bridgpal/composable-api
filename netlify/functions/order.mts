@@ -24,6 +24,7 @@ export default async function orders() {
   // Evaluate the feature flag
   const orderSource = await ldClient.variation('order-source', user, 'default-source');
   console.log("LAUNCHDARKLY orderSource", orderSource);
+  console.log("Time", new Date().toISOString());
   if (!orderSource) {
     return new Response("Missing shopping source", { 
       status: 400,
@@ -51,7 +52,6 @@ export default async function orders() {
       });
     }
     const json = await response.json();
-    console.log(json);
 
     return new Response(JSON.stringify(json), {
       headers: {
