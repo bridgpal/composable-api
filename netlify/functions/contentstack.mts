@@ -3,7 +3,7 @@ import type { Config } from "@netlify/functions";
 
 const query = `
 query products {
-    allContentstackProduct {
+    allContentstackproduct {
       nodes {
         description
         id
@@ -37,7 +37,7 @@ async function getProducts() {
   });
 
   const result = await res.json();
-  const nodes = result?.data?.allContentstackProduct?.nodes || [];
+  const nodes = result?.data?.allContentstackproduct?.nodes || [];
 
   return nodes.map((node: {
     id: string;

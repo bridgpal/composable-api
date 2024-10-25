@@ -2,24 +2,23 @@ import type { Config } from "@netlify/functions";
 
 
 const query = `
-  {
-    allShopifyProduct(sort: {title: ASC}) {
-      nodes {
-        id
-        title
-        shopifyId
-        featuredImage {
-          src
-          altText
+query MyQuery {
+  allShopifyproduct(limit: 16) {
+    nodes {
+      id
+      title
+      priceRangeV2 {
+        maxVariantPrice {
+          amount
         }
-        priceRange {
-          maxVariantPrice {
-            amount
-          }
-        }
+      }
+      featuredImage {
+        url
+        altText
       }
     }
   }
+}
 `;
 
 
@@ -37,15 +36,16 @@ async function getProducts() {
   });
 
   const result = await res.json();
-  const nodes = result?.data?.allShopifyProduct?.nodes || [];
-
-  return nodes.map((node: any) => ({
-    id: node.id,
-    title: node.title,
-    shopifyId: node.shopifyId,
-    imageUrl: node.featuredImage?.src || null,
-    price: node.priceRange.maxVariantPrice.amount,
-  }));
+  const nodes = result?.data?.allShopifyproduct?.nodes || [];
+  console.log("DATA", nodes);
+  return nodes
+    .filter((node: any) => node.featuredImage?.url) // Filter out nodes without a featuredImage.url
+    .map((node: any) => ({
+      id: node.id,
+      title: node.title,
+      imageUrl: node.featuredImage?.url || null,
+      price: node.priceRangeV2?.maxVariantPrice?.amount || 0,
+    }));
 }
 
 export default async function handler(event: Config) {
