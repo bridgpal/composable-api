@@ -3,7 +3,7 @@ import ProductCard from "@/components/ProductCard";
 async function getProducts() {
   const baseUrl = process.env.URL || "http://localhost:8888";
   console.log(baseUrl);
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  // await new Promise(resolve => setTimeout(resolve, 5000));
 
   const response = await fetch(`${baseUrl}/api/orders`, {
     cache: "no-store",
