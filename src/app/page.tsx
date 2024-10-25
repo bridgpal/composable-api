@@ -1,33 +1,7 @@
 import Image from "next/image";
-import Navigation from '@/components/Navigation';
-import ProductCard from '@/components/ProductCard';
-
-async function getProducts() {
-  const baseUrl = process.env.URL || 'http://localhost:8888';
-  console.log(baseUrl);
-  const response = await fetch(`${baseUrl}/api/orders`, { 
-    cache: 'no-store',
-  });
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch products');
-  }
-  
-  return response.json();
-}
-
-async function ProductList() {
-  const products = await getProducts()
-
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      {products.map((product: any) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
-    </div>
-  );
-}
-
+import Navigation from "@/components/Navigation";
+import ProductList from "@/components/ProductList";
+import { Suspense } from "react";
 export default async function HipEcommercePage() {
   return (
     <div className="min-h-screen bg-gray-100">
@@ -39,7 +13,9 @@ export default async function HipEcommercePage() {
         <p className="text-gray-600 mb-8">
           Discover our curated collection of sustainable fashion
         </p>
-        <ProductList />
+        <Suspense fallback={<div>Loading...</div>}>
+          <ProductList />
+        </Suspense>
       </div>
     </div>
   );
