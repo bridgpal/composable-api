@@ -4,7 +4,14 @@ async function getProducts() {
   const apiUrl = process.env.SLOW_API_URL;
   if (!apiUrl) throw new Error("SLOW_API is not defined");
 
-  const res = await fetch(apiUrl);
+  const res = await fetch(apiUrl, {
+    // Prevent fetch from using cached responses
+    cache: 'no-store',
+    headers: {
+      'Pragma': 'no-cache',
+      'Cache-Control': 'no-cache, no-store, must-revalidate'
+    }
+  });
   const result = await res.json();
   console.log("slow api results", result)
   const nodes = result || [];
