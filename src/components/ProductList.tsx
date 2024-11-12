@@ -1,7 +1,7 @@
 import ProductCard from "@/components/ProductCard";
 
 async function getProducts() {
-  const baseUrl = process.env.DEPLOY_PRIME_URL || "http://localhost:8888";
+  const baseUrl = process.env.DEPLOY_URL || "http://localhost:8888";
   console.log(baseUrl);
   // await new Promise(resolve => setTimeout(resolve, 5000));
 
