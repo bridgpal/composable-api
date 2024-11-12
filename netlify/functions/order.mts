@@ -35,7 +35,7 @@ export default async function orders() {
       }
     });
   }
-
+//updating api endpoint
   endpoint = `/.netlify/functions/wordpress-api`;
 
   // Validate if the endpoint exists
