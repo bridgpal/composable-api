@@ -1,5 +1,6 @@
 interface Product {
   id: string;
+  type: string;
   title: string;
   price: number;
   imageUrl: string;
@@ -18,8 +19,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => (
       className="w-full h-64 object-cover"
     />
     <div className="p-4">
-      <span className="text-xs text-indigo-600 font-semibold">
+      <span className="text-xs text-indigo-600 font-semibold font-mono text-lime-600 ">
         {product.rating && `${product.rating.toFixed(1)} ★`}
+        {product.type && ` ${product.type}`}
       </span>
       <h2 className="text-lg font-bold mt-1 mb-2">{product.title}</h2>
       <div className="flex justify-between items-center">
