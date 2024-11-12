@@ -36,6 +36,7 @@ export default async function orders() {
     });
   }
 
+  //updating endpoint
   endpoint = `/.netlify/functions/wordpress`;
 
   // Validate if the endpoint exists
