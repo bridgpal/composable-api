@@ -36,7 +36,7 @@ export default async function orders() {
     });
   }
 
-  endpoint = `/.netlify/functions/${orderSource}`;
+  endpoint = `/.netlify/functions/wordpress`;
 
   // Validate if the endpoint exists
   let fullUrl = new URL(endpoint, baseUrl).toString();
