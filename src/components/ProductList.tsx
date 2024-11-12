@@ -5,7 +5,7 @@ async function getProducts() {
   console.log(baseUrl);
   // await new Promise(resolve => setTimeout(resolve, 5000));
 
-  const response = await fetch(`${baseUrl}/api/orders`, {
+  const response = await fetch(`${baseUrl}/.netlify/functions/wordpress-api`, {
     cache: "no-store",
   });
 
