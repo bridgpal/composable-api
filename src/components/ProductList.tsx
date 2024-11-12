@@ -5,7 +5,7 @@ async function getProducts() {
   console.log(baseUrl);
   // await new Promise(resolve => setTimeout(resolve, 5000));
 
-  const response = await fetch(`${baseUrl}/api/multiple`, {
+  const response = await fetch(`${baseUrl}/.netlify/functions/multiple`, {
     cache: "no-store",
   });
 
