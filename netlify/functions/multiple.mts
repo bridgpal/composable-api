@@ -17,23 +17,16 @@ query MyQuery {
       }
     }
   }
-     allContentstackproduct {
-      nodes {
-        description
-        id
-        image {
-          url
-        }
-        price
-        rating
-        stripe_price_id
-        title
-        location {
-          latitude: lat
-          longitude: long
-        }
+  allContentstackproducts {
+    nodes {
+      id
+      price
+      title
+      product_image {
+        url
       }
     }
+  }
 }
 `;
 
@@ -52,12 +45,12 @@ async function getProducts() {
 
   const result = await res.json();
   const nodes = [
-    ...(result?.data?.allContentstackproduct?.nodes || []).map((node) => ({
+    ...(result?.data?.allContentstackproducts?.nodes || []).map((node) => ({
       id: node.id,
       type: "contentstack",
       title: node.title,
       price: node.price,
-      imageUrl: node.image?.url || null,
+      imageUrl: node.product_image?.url || null,
     })),
     ...(result?.data?.allShopifyproduct?.nodes || []).map((node) => ({
       id: node.id,
