@@ -5,15 +5,15 @@ query MyQuery {
   allShopifyproduct(limit: 16) {
     nodes {
       id
-      title
       priceRangeV2 {
         maxVariantPrice {
           amount
         }
       }
+      title
       featuredImage {
-        url
         altText
+        url
       }
     }
   }
@@ -21,9 +21,23 @@ query MyQuery {
     nodes {
       id
       price
-      title
       product_image {
         url
+      }
+      title
+    }
+  }
+  allWordpressPost {
+    edges {
+      node {
+        id
+        acf {
+          price
+          productImage
+        }
+        title {
+          raw
+        }
       }
     }
   }
@@ -59,6 +73,13 @@ async function getProducts() {
       price: node.priceRangeV2?.maxVariantPrice?.amount?.toString() || "0",
       imageUrl: node.featuredImage?.url || null,
     })),
+    ...(result?.data?.allWordpressPost?.edges || []).filter((node: any) => node.node.acf?.productImage).map((node: any) => ({
+      id: node.node.id,
+      type: "Wordpress",
+      title: node.node.title.raw,
+      imageUrl: node.node.acf?.productImage || null,
+      price: node.node.acf?.price.substring(1) || null,
+    }))
   ]
     // Remove entries without images
     .filter((node) => node.imageUrl !== null)
