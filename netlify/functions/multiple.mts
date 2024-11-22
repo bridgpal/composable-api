@@ -2,7 +2,7 @@ import type { Config } from "@netlify/functions";
 
 const query = `
 query MyQuery {
-  allShopifyproduct(limit: 16) {
+  allShopifyproduct {
     nodes {
       id
       priceRangeV2 {
@@ -25,9 +25,10 @@ query MyQuery {
         url
       }
       title
+      updated_at
     }
   }
-  allWordpressPost {
+  allWordpressPost(filter: {acf: {productImage: {}}}) {
     edges {
       node {
         id
@@ -38,6 +39,17 @@ query MyQuery {
         title {
           raw
         }
+      }
+    }
+  }
+  allLegacyProduct {
+    edges {
+      node {
+        id
+        image
+        price
+        title
+        description
       }
     }
   }
@@ -58,6 +70,7 @@ async function getProducts() {
   });
 
   const result = await res.json();
+  console.log(result?.data?.allLegacyProduct?.edges);
   const nodes = [
     ...(result?.data?.allContentstackproducts?.nodes || []).map((node) => ({
       id: node.id,
@@ -79,7 +92,14 @@ async function getProducts() {
       title: node.node.title.raw,
       imageUrl: node.node.acf?.productImage || null,
       price: node.node.acf?.price.substring(1) || null,
-    }))
+    })),
+    ...(result?.data?.allLegacyProduct?.edges || []).map((node: any) => ({
+      id: node.node.id,
+      type: "Legacy API",
+      title: node.node.title,
+      price: node.node.price || "0",
+      imageUrl: node.node.image,
+    })),
   ]
     // Remove entries without images
     .filter((node) => node.imageUrl !== null)
