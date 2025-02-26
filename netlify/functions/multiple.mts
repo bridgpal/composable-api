@@ -2,21 +2,6 @@ import type { Config } from "@netlify/functions";
 
 const query = `
 query MyQuery {
-  allShopifyproduct {
-    nodes {
-      id
-      priceRangeV2 {
-        maxVariantPrice {
-          amount
-        }
-      }
-      title
-      featuredImage {
-        altText
-        url
-      }
-    }
-  }
   allContentstackproducts {
     nodes {
       id
@@ -28,7 +13,7 @@ query MyQuery {
       updated_at
     }
   }
-  allWordpressPost(filter: {acf: {productImage: {}}}) {
+  allWpPost(filter: {acf: {productImage: {}}}) {
     edges {
       node {
         id
