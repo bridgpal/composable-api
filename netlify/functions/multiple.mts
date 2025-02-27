@@ -64,14 +64,7 @@ async function getProducts() {
       price: node.price,
       imageUrl: node.product_image?.url || null,
     })),
-    ...(result?.data?.allShopifyproduct?.nodes || []).map((node) => ({
-      id: node.id,
-      type: "shopify",
-      title: node.title,
-      price: node.priceRangeV2?.maxVariantPrice?.amount?.toString() || "0",
-      imageUrl: node.featuredImage?.url || null,
-    })),
-    ...(result?.data?.allWordpressPost?.edges || []).filter((node: any) => node.node.acf?.productImage).map((node: any) => ({
+    ...(result?.data?.allWpPost?.edges || []).filter((node: any) => node.node.acf?.productImage).map((node: any) => ({
       id: node.node.id,
       type: "Wordpress",
       title: node.node.title.raw,
