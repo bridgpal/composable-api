@@ -2,6 +2,21 @@ import type { Config } from "@netlify/functions";
 
 const query = `
 query MyQuery {
+  allShopifyproduct {
+    nodes {
+      id
+      priceRangeV2 {
+        maxVariantPrice {
+          amount
+        }
+      }
+      title
+      featuredImage {
+        altText
+        url
+      }
+    }
+  }
   allContentstackproducts {
     nodes {
       id
